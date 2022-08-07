@@ -14,6 +14,8 @@ An implementation of an extended brainf\*ck interpreter in python. This extended
 | `(`, `)`         | `Define a function inside (). Nested function definitions like (()) are not supported.` |
 | `*`              | `Call the function that has number == value of the byte at the data pointer.`|
 
+All other characters that are not commands are ignored.
+
 The function are numbered following the order in which they were defined.
 For instance, for the code input `(+++)(->>[-<+>]<<)++<++++<+*`, we define two functions and then execute the sequence `++<++++<+*`, which sets the values 2 and 4 in the bytes at positions 0 and -1, then sets the value 1 at byte-position -2 and calls the function of index 1 (the second function: `(->>[-<+>]<<)`) by executing the `*` command. This code does the summation of the numbers 2 and 4.
 
