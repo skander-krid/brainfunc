@@ -19,7 +19,12 @@ class InterpreterTestCase(unittest.TestCase):
         """
 
         def fib(n):
-            lo, hi = 1, 1
+            lo, hi = 0, 1
+            counter = 0
+            while counter != n:
+                lo, hi = hi, lo + hi
+                counter += 1
+            return lo
 
         # TODO: Tests/ fix this code for n = 0, 1, 2
         # TODO: Fix the function 0 so that the garbage is
@@ -30,11 +35,13 @@ class InterpreterTestCase(unittest.TestCase):
         "(-->>>>[-<<<<+<+>>>>>]<<<<<[->>>>>+<<<<<]>>>>[-<<<-<+>>>>]<<<<[->>>>+<<<<]>)" + \
         "(--->[-]<)" + \
         "+++++++++++++++<*"
-        interpreter = Interpreter(code, n=5)
+        interpreter = Interpreter(code)
+        interpreter.run(verbose=False)
         interpreter.band.move_right()
         self.assertEqual(interpreter.band.get(), fib(15))
     
     def test_addition(self):
         code = "(>[->+<]>)+++<+++++++<*"
-        interpreter = Interpreter(code, n=2)
-        assert(interpreter.band.get() == 10)
+        interpreter = Interpreter(code)
+        interpreter.run(verbose=False)
+        self.assertEqual(interpreter.band.get(), 10)
