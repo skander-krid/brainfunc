@@ -1,6 +1,6 @@
 from functools import partial
-from band import Band
-from code import Code
+from brainfunc.band import Band
+from brainfunc.code import Code
 
 class Interpreter:
     """
@@ -13,16 +13,17 @@ class Interpreter:
     :param n: (Optional) The length of the band will be (2n+1).
     :type n: int
     """
+    #TODO: Find better design for this class
     def __init__(self, code, n = 10):
         self.band = Band(n)
         self.code = Code(code)
         self.methods = []
 
-    def call_method(self):
+    def call_method(self, verbose):
         if self.band.get() >= len(self.methods):
             raise Exception(f"Calling function {self.band.get()} while only {len(self.methods)} defined!")
         method_code = Code(self.methods[self.band.get()])
-        self._execute(method_code)
+        self._execute(method_code, verbose)
 
     def define_method(self):
         self.code.next()
@@ -50,7 +51,8 @@ class Interpreter:
         else:
             brackets.pop(-1)
 
-    def _execute(self, code):
+    def _execute(self, code, verbose):
+        # TODO: Find a better way to decompose this function
         brackets = []
         mappings = {
             '>': self.band.move_right,
@@ -60,24 +62,23 @@ class Interpreter:
             '[': partial(self.loop_open, code, brackets),
             ']': partial(self.loop_close, code, brackets),
             '(': self.define_method,
-            '*': self.call_method,
+            '*': partial(self.call_method, verbose),
         }
         while not code.eof():
             command = code.get()
             if command in mappings.keys():
-                print(command)
-                self.band.visualize()
+                if verbose:
+                    self.band.visualize()
+                    print(command)
                 mappings[command]()
                 code.next()
 
-    def run(self):
-        self._execute(self.code)
+    def run(self, verbose=True):
+        self._execute(self.code, verbose=verbose)
+        if verbose:
+            self.band.visualize()
 
 if __name__ == '__main__':
-    code = "(>-<+<+<+<++*[<+++*>+*>>>+<<<++*])" + \
-    "(->>[-<<+>>]<[->+<<+>]<[->+<])" + \
-    "(-->>>>[-<<<<+<+>>>>>]<<<<<[->>>>>+<<<<<]>>>>[-<<<-<+>>>>]<<<<[->>>>+<<<<]>)" + \
-    "(--->[-]<)" + \
-    "+++++++++++++++<*" # Fibonacci(15)
+    code = "(>[->+<]>)+++<+++++++<*"
     interpreter = Interpreter(code)
     interpreter.run()
