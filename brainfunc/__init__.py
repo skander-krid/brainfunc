@@ -1,0 +1,1 @@
+from brainfunc.interpreter import Interpreter

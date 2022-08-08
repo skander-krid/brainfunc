@@ -1,66 +1,18 @@
 from functools import partial
-import time
-
-class Band:
-    def __init__(self, n):
-        self.array = [0] * (2*n+1)
-        self.middle = n
-        self.n = n
-        self.pointer = 0
-
-    def _test_out_of_boundaries(self, key):
-        if abs(key) > self.n:
-            raise Exception("Index out of the band's boundaries!")
-
-    def __setitem__(self, key, value):
-        self._test_out_of_boundaries(key)
-        self.array[self.middle + key] = value
-
-    def __getitem__(self, key):
-        self._test_out_of_boundaries(key)
-        return self.array[self.middle + key]
-
-    def get(self):
-        return self[self.pointer]
-
-    def inc(self):
-        # TODO: Make it work like a byte
-        self[self.pointer] += 1
-
-    def dec(self):
-        # TODO: Make it work like a byte
-        self[self.pointer] -= 1
-
-    def move_right(self):
-        self.pointer += 1
-        self._test_out_of_boundaries(self.pointer)
-
-    def move_left(self):
-        self.pointer -= 1
-        self._test_out_of_boundaries(self.pointer)
-
-    def visualize(self):
-        print(self.array)
-        print((1 + (self.middle + self.pointer) * 3) * ' ' + '*')
-
-class Code:
-    def __init__(self, code):
-        self.code = code
-        self.pointer = 0
-
-    def next(self):
-        self.pointer += 1
-
-    def eof(self):
-        return self.pointer >= len(self.code)
-
-    def jump(self, to):
-        self.pointer = to
-
-    def get(self):
-        return self.code[self.pointer]
+from band import Band
+from code import Code
 
 class Interpreter:
+    """
+    An interpreter takes the brainfunc code as input to
+    run it when the run() function is called.
+
+    :param code: The brainfunc code.
+    :type code: string
+
+    :param n: (Optional) The length of the band will be (2n+1).
+    :type n: int
+    """
     def __init__(self, code, n = 10):
         self.band = Band(n)
         self.code = Code(code)
