@@ -1,5 +1,5 @@
 # brainfunc
-An implementation of an extended brainf\*ck interpreter in python. This extended version of brainf\*ck, called brainfunc, supports use of functions. Function are defined using the `(` and `)` operators and called with the `*` command.
+An implementation of an extended brainfuck interpreter in python. This extended version of brainfuck, called brainfunc, supports use of functions. Function are defined using the `(` and `)` operators and called with the `*` command.
 
 ## Brainfunc specification:
 
